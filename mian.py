@@ -5,7 +5,6 @@ from pptx.dml.color import RGBColor
 
 client = ZhipuAI(api_key="622b7be459b291e1fca40f128ae2447c.2tCWCQFAvP5a5ma2")  # 请填写您自己的APIKey
 
-
 keyword = "ai,应用"
 input_content = "ai创新应用"
 
@@ -20,20 +19,21 @@ title_response = client.chat.completions.create(
 )
 title = title_response.choices[0].message.content
 print(f"title:{title}")
-# print(response.choices[0].message.content)
+
 
 content_query = f'''这是用户的输入：{input_content}
-他要就其中的主题写PPT汇报，在PPT之前需要有一份清晰的思路，请你帮他写一份清晰的创作思路，要求尽可能详尽，参考示例的输出。
-
-示例：
-输入：我要做一个培训项目，主题是《安全用电知识》受众是中小学生
-输出：
-1. 理解受众：中小学生应该掌握基础的安全用电常识，内容需要贴近学生的理解水平，避免过于抽象的技术术语。
-2. 安全原则：介绍安全用电的基本规则，如何预防触电事故。
-3. 实际操作：结合实际情况，讲述在家中和学校的安全用电行为。
-4. 案例教育：引入一些典型的案例，让学生通过事例了解不安全用电的后果。
-5. 常见误区：澄清一些常见的用电误区，提升学生的自我保护意识。
-6. 互动环节：设置问答或小组讨论环节，强化学生对于知识点的掌握。'''
+他要就其中的主题写PPT汇报，在PPT之前需要有一份清晰的思路，请你帮他写一份清晰的创作思路，要求尽可能详尽，要求分成四个部分，要返回每部分的思路 和要讲述的内容，下面是示例：
+一、引言部分
+简单阐述气象学对人类生活的重要性，为整个汇报奠定基调：
+提及气象与我们日常生活息息相关，如天气影响着我们的出行、衣着、农业生产、能源消耗等方面。例如，暴雨天气会导致道路积水影响交通，而合适的气象条件对农作物的生长至关重要。
+二、气象基础知识部分
+对气象学的概念进行简单的解释，让观众对气象学有一个初步的认识：
+三、常见气象现象部分
+选择一些常见的气象现象进行详细介绍，如降水（雨、雪、冰雹等）、云的类型、雷暴等：
+解释每种气象现象的形成机制，包括涉及到的气象要素的变化。
+四、气象与人类社会部分
+阐述气象对人类社会各个方面的影响，包括正面影响和负面影响。
+展望气象学未来的发展趋势，如更精准的预报技术、应对气候变化的策略等。'''
 
 content_response = client.chat.completions.create(
     model="glm-4-flash",  # 请填写您要调用的模型名称
@@ -43,60 +43,51 @@ content_response = client.chat.completions.create(
 )
 
 content = content_response.choices[0].message.content
-print(f"content:{content}")
+
 
 md_query = f'''根据主题：{keyword} 和标题{title}，参考思路{content}为用户制作一份PPT大纲，以markdown格式输出。大纲必须包括类似示例中对于小标题的内容扩充，不要求详细但需要针对小标题内容简述。
-
-markdown格式大纲示例：
-
-# 安全用电知识讲座
-
-## 开场
-- 引入主题：通过案例说明用电安全的重要性。
-- 介绍重要性和必要性：阐述正确用电对个人和家庭的意义以及避免事故的必要性。
-
-## 第一章：电的基本认识
-- 电的用途：简述电在日常生活中的应用，如照明、加热、通讯等方面。
-- 电的潜在危险：讲解不当使用电可能引起的风险，例如触电、火灾等。
-
-## 第二章：安全用电原则
-- 不私拉乱接电线：说明私拉乱接电线的危害和如何避免。
-- 不在潮湿环境中使用电器设备：讲解潮湿对电器设备的影响及安全使用的方法。
-- 正确使用电器设备：列举正确操作电器的要点。
-- 不玩弄插座和开关：强调插座和开关使用的注意事项。
-
-## 第三章：认识标识与注意事项
-- 认识安全用电标识：解释安全标识的含义及其重要性。
-- 注意远离高压设备：强调高压电的危险性和保持安全距离。
-- 发现问题如何应对：讨论遇到电气问题的正确响应方式。
-
-## 第四章：家庭中的安全用电
-- 使用电器的正确方法：介绍家用电器使用的安全指南。
-- 如何防止电器过载发热：探讨电器过载的原因及预防措施。
-- 学会使用保险箱、漏电保护器：讲解如何使用这些设备预防电气事故。
-
-## 第五章：校园中的安全用电
-- 学校电线及设备的安全使用：指出学校用电设备的安全要点。
-- 遇到雷雨天气如何安全用电：提供雷雨天气下的用电安全建议。
-- 电教室、图书馆用电安全：讲述公共场所用电安全管理。
-
-## 第六章：触电急救措施
-- 认识触电现象：说明触电是如何发生的。
-- 家庭中触电急救步骤：提供家庭触电事故的应急处理步骤。
-- 学校中触电急救步骤：指导在学校发生触电事故的急救措施。
-
-## 第七章：我应该如何做
-- 学生在家庭中如何安全用电：给出学生在家中用电的指导建议。
-- 学生在校园中如何安全用电：讨论学生在校园的安全用电行为。
-- 安全用电的小提示：总结一些简单易行的用电安全小常识。
-
-## 结束语
-- 重要性的再次强调：总结讲座内容，重申用电安全的重要性。
-- 鼓励学生安全的用电习惯：激励学生养成良好的用电习惯，确保自身安全。
-
-## 互动环节
-- 提问与答疑：解答学生在讲座中提出的问题。
-- 分组讨论：我们可以为安全用电做些什么？引导学生思考和讨论在日常生活中如何实践安全用电。'''
+输出格式要求：以markdown格式输出，整个ppt的标题用#，每章的内容用##，每个ppt页的标题用### ，具体内容用-。
+输出内容示例：
+# 气象知识科普
+## 一、引言部分
+### 气象学的重要性
+- 气象与日常生活的紧密联系
+- 天气对出行、衣着、农业、能源的影响
+- 实例分析：暴雨与农作物生长
+## 二、气象基础知识部分
+### 气象学概述
+### 气象学的定义
+- 气象学的研究领域
+- 气象学的基本概念
+## 三、常见气象现象部分
+### 降水现象
+- 降水现象出现的原因
+- 降水现象的特点
+### 雨的形成
+- 雨的形成过程中气象要素的变化
+### 雪的形成
+- 雪的变化
+### 冰雹的形成
+- 冰雹的变化
+### 云的类型
+- 积云的形成与特征
+- 层云的形成与特征
+- 高层云的形成与特征
+### 雷暴
+- 雷暴的形成机制
+- 雷暴的类型与影响
+## 四、气象与人类社会部分
+### 气象的正面影响
+- 对农业的好处
+- 水资源管理的好处
+### 气象的负面影响
+- 极端天气事件的影响
+- 气象灾害的案例
+### 气象学的未来发展
+- 精准预报技术
+### 新技术与发展趋势
+- 应对气候变化的策略
+气候变化的影响与应对措施'''
 
 # 创建聊天完成的响应，使用指定的模型对用户消息进行回复
 md_response = client.chat.completions.create(
@@ -107,54 +98,103 @@ md_response = client.chat.completions.create(
 )
 
 md = md_response.choices[0].message.content
-print(f"md:{md}")
+
+# 读取现有PPT文件
+ppt = Presentation('test.pptx')
 
 # 解析Markdown内容，提取标题和对应的内容
-sections = []
-current_section = {'title': None, 'content': []}
+section = {'title': None, "child": []}
 
 lines = md.split('\n')
+current_main_section = {'title': None, "child": []}
+current_sub_section = {'title': None, "child": []}
 for line in lines:
-    if line.startswith('## '):  # 二级标题
-        if current_section['title'] is not None:
-            sections.append(current_section)
-        current_section = {'title': line[3:].strip(), 'content': []}
-    elif current_section['title'] is not None:
-        current_section['content'].append(line.strip())
+    if line.startswith('# '):  # 主标题
+        section = {'title': line[2:].strip(), "child": []}
+    elif line.startswith('## '):  # 一级标题
+        current_section = {'title': line[3:].strip(), "child": []}
+        current_main_section = current_section
+        section['child'].append(current_section)
+    elif line.startswith('### '):  # 二级标题
+        current_section = {'title': line[4:].strip(), "child": []}
+        current_sub_section = current_section
+        current_main_section['child'].append(current_section)
+    elif line.startswith('- '):
+        current_sub_section['child'].append(line[2:].strip())
 
-if current_section['title'] is not None:
-    sections.append(current_section)
+def add_text_to_shape(shape, text):
+    """将文本添加到形状的占位符中，保留原有样式"""
+    """将文本添加到形状的占位符中，保留原有样式"""
+    if not shape.has_text_frame:
+        return
+    text_frame = shape.text_frame
 
-# 创建一个新的PPT对象
-ppt = Presentation()
+    # 保留原有段落的样式
+    if len(text_frame.paragraphs) > 0:
+        first_paragraph = text_frame.paragraphs[0]
 
-# 遍历每个部分，创建新的幻灯片
-for section in sections:
-    # 添加一个新的幻灯片，并选择索引为5的幻灯片布局
-    slide = ppt.slides.add_slide(ppt.slide_layouts[6])
+        # 清除原有文本，但保留样式
+        for run in first_paragraph.runs:
+            run.text = ""
 
-    # 删除所有占位符
-    for shape in slide.shapes:
-        if shape.has_text_frame:
-            shape.text_frame.clear()
+        # 添加新文本
+        run = first_paragraph.add_run()
+        run.text = text
 
-    # 定义文本框的位置和大小
-    left = top = Inches(1)
-    width = height = Inches(5)
+        # 复制原有段落的样式
+        if len(first_paragraph.runs) > 1:
+            original_run = first_paragraph.runs[0]
+            run.font.name = original_run.font.name
+            run.font.size = original_run.font.size
+            run.font.bold = original_run.font.bold
+            run.font.italic = original_run.font.italic
+            run.font.underline = original_run.font.underline
+            # run.font.strike = original_run.font.strike
+            # run.font.subscript = original_run.font.subscript
+            # run.font.superscript = original_run.font.superscript
 
-    # 在幻灯片上添加文本框
-    txBox = slide.shapes.add_textbox(left, top, width, height)
+    else:
+        p = text_frame.add_paragraph()
+        p.text = text
 
-    # 获取文本框的文本框对象
-    tf = txBox.text_frame
 
-    # 设置文本框的文本内容
-    tf.text = section['title']
+def fill_presentation(ppt, section):
+    """根据解析后的数据填充PPT"""
+    slides = list(ppt.slides)
+    index = 0
 
-    # 添加内容
-    for content in section['content']:
-        p = tf.add_paragraph()
-        p.text = content
+    def fill_slide(slide, text):
+        nonlocal index
+        if index < len(slides):
+            for shape in slides[index].shapes:
+                if shape.has_text_frame:
+                    add_text_to_shape(shape, text)
+                    break  # 假设每个幻灯片只有一个主要的文本占位符
+            index += 1
+        else:
+            raise ValueError("PPT中的幻灯片数量不足")
+
+    # 填充主标题
+    fill_slide(slides[index], section['title'])
+
+    # for main_section in section['child']:
+    #     # 填充一级标题
+    #     fill_slide(slides[index], main_section['title'])
+    #
+    #     for sub_section in main_section['child']:
+    #         # 填充二级标题
+    #         fill_slide(slides[index], sub_section['title'])
+    #
+    #         for content in sub_section['child']:
+    #             # 填充具体内容
+    #             fill_slide(slides[index], content)
+
+
+# 读取现有PPT文件
+ppt = Presentation('test.pptx')
+
+# 调用函数填充PPT
+fill_presentation(ppt, section)
 
 # 保存PPT文件
-ppt.save('test_ppt.pptx')
+ppt.save('updated_test.pptx')
